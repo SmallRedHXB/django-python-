@@ -1,0 +1,60 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>登录</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'jquery-easyui-1.5.5.4/themes/default/easyui.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'jquery-easyui-1.5.5.4/themes/icon.css' %}">
+	<script type="text/javascript" src="{% static 'jquery-easyui-1.5.5.4/jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'jquery-easyui-1.5.5.4/jquery.easyui.min.js' %}"></script>
+    <!-- <link rel="stylesheet" type="text/css" href="../static/jquery-easyui-1.5.5.4/themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="../static/jquery-easyui-1.5.5.4/themes/icon.css">
+	<script type="text/javascript" src="../static/jquery-easyui-1.5.5.4/jquery.min.js"></script>
+    <script type="text/javascript" src="../static/jquery-easyui-1.5.5.4/jquery.easyui.min.js"></script> -->
+    <style>
+        .login-body{
+            margin-left: 50% !important;
+            position: relative;
+            left: -194px;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="text-align: center">
+        <div class="login-body">
+            <div style="margin:20px 0;"></div>
+            <div class="easyui-panel" title="教务系统系统" style="width:100%;max-width:400px;padding:30px 60px;">
+                <div style="margin-bottom:20px">
+                    <input id="textbox_username" class="easyui-textbox" label="用户名:" labelPosition="top" data-options="prompt:'请输入用户名'" style="width:100%;">
+                </div>
+                <div style="margin-bottom:20px">
+                    <input id="textbox_password" class="easyui-textbox" label="密码:" labelPosition="top" style="width:100%;">
+                </div>
+                
+                <div>
+                    <p class="easyui-linkbutton" iconCls="icon-ok" style="width:100%;height:32px">登录</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $('.easyui-linkbutton').click(function(){
+            var url = "{% url 'Mypage:login_check' %}"
+                username = $('#textbox_username').val()
+                password = $('#textbox_password').val()
+            $.get(url, {'username': username, 'password':password}, function(data){
+                var data=JSON.parse(data);
+                if (data.errorCode==0){
+                    location.href= "{% url 'Mypage:homepage' %}"
+                }
+                else{
+                    alert(data.errorsList);
+                }
+            })
+        })
+    </script>
+</body>
+</html>

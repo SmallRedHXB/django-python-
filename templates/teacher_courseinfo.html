@@ -1,0 +1,263 @@
+{% extends 'base_t.html' %}
+{% load staticfiles %}
+
+{% block style %}
+    <style>
+    .data_table{
+        width: 100%;
+    }
+
+    .data_table .panel.datagrid.panel-htop{
+        width: 100% !important;
+    }
+
+    #dg{
+        width: 100% !important;
+    }
+
+    .data_table .datagrid-wrap.panel-body{
+        min-height: 550px;
+        height: 100% !important;
+    }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div style="height: 30px;">
+        <select class="course" style="float: right; height: 30px; padding-right: 200px;">
+        </select>
+    </div>
+    <div class="data_table">
+        <table id="dg" title="学生列表" style="width:100%;height:300px" data-options="
+                    rownumbers:true,
+                    singleSelect:true,
+                    autoRowHeight:false,
+                    pagination:true,
+                    pageSize:10">
+            <thead>
+                <tr>
+                    <th field="id" width="280">学生学号</th>
+                    <th field="name" width="280">学生姓名</th>
+                    <th field="coursename" width="150" align="center">课程</th>
+                    <th field="grade" width="120"  align="center">成绩</th>                 
+                    <th field="pass" width="200" align="center">是否通过</th>
+                    <th field="edit" class="edit" width="200" align="center" data-options="styler:cellStyler">编辑</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <div class="iBackg" style="height: 100%;width: 100%; opacity: 0.5; background-color: gray; position: absolute; top: 0; left: 0;display: none;"></div>
+    <div class="iModel" style="height: 400px;width: 400px;background-color: rgba(220, 220, 220, 0.863); position: absolute;top: 50%;left: 50%;margin-left: -200px; margin-top: -200px; display: none;">
+        <div style="background-color: dodgerblue;height: 40px; text-align: right;">
+            <img class="img-close" src="{% static 'images/del.png' %}"  height="20px" width="20px" style="margin-right: 10px;vertical-align:middle;margin-top: 10px;cursor: pointer;">
+        </div>
+        <div style="text-align: center;height: 40px;margin-top: 40px;">
+            学号：  <span id="id">12345687654</span>
+        </div>
+        <div style="text-align: center;height: 40px;">
+            姓名：<span id="name">胡雄斌</span>
+        </div>
+        <div style="text-align: center;height: 40px;">
+            课程：<span id="course">算法</span>
+        </div>
+        <div style="text-align: center;height: 40px;">
+            得分：<input type="text" id="grade">
+        </div>
+        <div style="text-align: center;height: 40px;">
+            是否通过：
+            <select name="pass" id="pass">
+                <option value="0">暂不评定</option>
+                <option value="1">通过</option>
+                <option value="2">未通过</option>
+            </select>
+        </div>
+        <div style="text-align: center;height: 40px;margin-top: 50px;">
+            <button class="btn-save">保存</button>
+        </div>
+        
+    </div>
+        <script>
+            function cellStyler(value,row,index){
+                return 'color:red;cursor: pointer';
+		    }
+
+            (function($){
+                function pagerFilter(data){
+                    if ($.isArray(data)){	// is array
+                        data = {
+                            total: data.length,
+                            rows: data
+                        }
+                    }
+                    var target = this;
+                    var dg = $(target);
+                    var state = dg.data('datagrid');
+                    var opts = dg.datagrid('options');
+                    if (!state.allRows){
+                        state.allRows = (data.rows);
+                    }
+                    if (!opts.remoteSort && opts.sortName){
+                        var names = opts.sortName.split(',');
+                        var orders = opts.sortOrder.split(',');
+                        state.allRows.sort(function(r1,r2){
+                            var r = 0;
+                            for(var i=0; i<names.length; i++){
+                                var sn = names[i];
+                                var so = orders[i];
+                                var col = $(target).datagrid('getColumnOption', sn);
+                                var sortFunc = col.sorter || function(a,b){
+                                    return a==b ? 0 : (a>b?1:-1);
+                                };
+                                r = sortFunc(r1[sn], r2[sn]) * (so=='asc'?1:-1);
+                                if (r != 0){
+                                    return r;
+                                }
+                            }
+                            return r;
+                        });
+                    }
+                    var start = (opts.pageNumber-1)*parseInt(opts.pageSize);
+                    var end = start + parseInt(opts.pageSize);
+                    data.rows = state.allRows.slice(start, end);
+                    return data;
+                }
+    
+                var loadDataMethod = $.fn.datagrid.methods.loadData;
+                var deleteRowMethod = $.fn.datagrid.methods.deleteRow;
+                $.extend($.fn.datagrid.methods, {
+                    clientPaging: function(jq){
+                        return jq.each(function(){
+                            var dg = $(this);
+                            var state = dg.data('datagrid');
+                            var opts = state.options;
+                            opts.loadFilter = pagerFilter;
+                            var onBeforeLoad = opts.onBeforeLoad;
+                            opts.onBeforeLoad = function(param){
+                                state.allRows = null;
+                                return onBeforeLoad.call(this, param);
+                            }
+                            var pager = dg.datagrid('getPager');
+                            pager.pagination({
+                                onSelectPage:function(pageNum, pageSize){
+                                    opts.pageNumber = pageNum;
+                                    opts.pageSize = pageSize;
+                                    pager.pagination('refresh',{
+                                        pageNumber:pageNum,
+                                        pageSize:pageSize
+                                    });
+                                    dg.datagrid('loadData',state.allRows);
+                                }
+                            });
+                            $(this).datagrid('loadData', state.data);
+                            if (opts.url){
+                                $(this).datagrid('reload');
+                            }
+                        });
+                    },
+                    loadData: function(jq, data){
+                        jq.each(function(){
+                            $(this).data('datagrid').allRows = null;
+                        });
+                        return loadDataMethod.call($.fn.datagrid.methods, jq, data);
+                    },
+                    deleteRow: function(jq, index){
+                        return jq.each(function(){
+                            var row = $(this).datagrid('getRows')[index];
+                            deleteRowMethod.call($.fn.datagrid.methods, $(this), index);
+                            var state = $(this).data('datagrid');
+                            if (state.options.loadFilter == pagerFilter){
+                                for(var i=0; i<state.allRows.length; i++){
+                                    if (state.allRows[i] == row){
+                                        state.allRows.splice(i,1);
+                                        break;
+                                    }
+                                }
+                                $(this).datagrid('loadData', state.allRows);
+                            }
+                        });
+                    },
+                    getAllRows: function(jq){
+                        return jq.data('datagrid').allRows;
+                    },           
+                })
+            })(jQuery);
+        
+        //表示行单击
+        // $("#dg").datagrid({
+        //     onClickRow: function(rowIndex, rowData){
+        //         var xh = rowData.id,
+        //             name = rowData.name,
+        //             coursename = rowData.coursename;
+        //         $('.iModel').css('display', 'inline')
+        //         $('.iBackg').css('display', 'inline')
+        //     }
+        // })
+
+        $("#dg").datagrid({
+            onClickCell: function (rowIndex, field, value) {
+                if(field!='edit'){
+                    return;
+                }
+                var rows = $('#dg').datagrid('getRows');
+                var xh = rows[rowIndex].id,
+                    name = rows[rowIndex].name,
+                    coursename = rows[rowIndex].coursename;
+                $('.iModel').css('display', 'inline')
+                $('.iBackg').css('display', 'inline')   
+                $('#id').text(xh)
+                $('#name').text(name)
+                $('#course').text(coursename)  
+            }
+        })
+
+        $('.img-close').click(function(){
+            $('.iModel').css('display', 'none')
+            $('.iBackg').css('display', 'none')
+        })
+
+        $('.btn-save').click(function(){
+            var grade = $('#grade').val(),
+                ispass = $('#pass option:selected').val(),
+                xh = $('#id').text(),
+                courseid = $('.course option:selected').val(),
+                url = '{% url "Mypage:save_studentgrade" %}'
+            alert('kaishi')
+            $.get(url, {'xh': xh, 'courseid': courseid, 'grade': grade, 'ispass':ispass}, function(res){
+                alert(res)
+                $('.iModel').css('display', 'none')
+                $('.iBackg').css('display', 'none')
+                getData_teachercourse();
+            })
+        })
+
+        $(function(){	
+            var course = {{course|safe}};
+            for(var i=course.length - 1; i>=0; i--){
+                $('.course').append('<option value ='+ course[i].code +'>'+course[i].name+'</option>')
+            }		
+        });
+
+        var getData_teachercourse = function(){
+            var text = $('.course option:selected').text(),
+                code = $('.course option:selected').val(),
+                url = '{% url "Mypage:getteacher_course" %}';
+            $.get(url, {'text': text, 'code': code}, function(res){
+                $('#dg').datagrid({data:res}).datagrid('clientPaging');
+            })
+        }
+
+        $(function(){
+			getData_teachercourse();
+        });
+        
+        $('.course').change(function(){
+            getData_teachercourse()
+        })
+
+        $(function(){
+            $('#menu6').addClass('active')
+            $('#allmenu').accordion('select', '课程信息')
+        });
+    
+    </script>
+{% endblock %}

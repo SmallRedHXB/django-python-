@@ -1,0 +1,216 @@
+{% extends 'base_t.html' %}
+{% load staticfiles %}
+
+
+{% block style %}
+<style>
+    td{
+        text-align: center;
+        cursor: default;
+    }
+    th{
+        cursor: pointer;
+        background-color: rgb(231, 231, 231);  
+        text-align: center;       
+    }
+    th:hover{
+        background-color: rgb(255, 255, 255);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+	<!-- <table class="easyui-datagrid" title="课程表" style="width:700px;height:250px"
+            data-options="url:'{% static 'datagrid_data1.json' %}',method:'get'">
+		<thead>
+			<tr>
+                <th data-options="field:'blank',width:80,align:'center'"></th>
+				<th data-options="field:'Mon',width:170,align:'center'">星期一</th>
+				<th data-options="field:'Tues',width:170,align:'center'">星期二</th>
+				<th data-options="field:'Wed',width:170,align:'center'">星期三</th>
+				<th data-options="field:'Thur',width:170,align:'center'">星期四</th>
+				<th data-options="field:'Fri',width:170",align:'center'>星期五</th>
+                <th data-options="field:'Satu',width:170,align:'center'">星期六</th>
+                <th data-options="field:'Sun',width:170,align:'center'">星期日</th>
+			</tr>
+		</thead>
+    </table> -->
+    第一节课时间：08：30-09：15；第二节课时间：09：25-10：05；第三节课时间：10：20-11：05
+    第四节课时间：11：15-11：55；第五节课时间：14：00-14：45；第六节课时间：14：55-15：35
+    第七节课时间：15：50-16：35；第八节课时间：16：45-17：25；第九节课时间：18：30-19：15
+    第十节课时间：19：25-20：10；第十一节课时间：20：20-21：05
+    <table width=100% height="500"  bgcolor=#ccc cellspacing="1" align="center">
+        <tr bgcolor="white">
+           <th colspan="2" width=12.5%></th>
+           <th width=12.5%>星期一</th>
+           <th width=12.5%>星期二</th>
+           <th width=12.5%>星期三</th>
+           <th width=12.5%>星期四</th>
+           <th width=12.5%>星期五</th>
+           <th width=12.5%>星期六</th>
+           <th width=12.5%>星期日</th>
+        </tr>
+        <tr bgcolor="white" class="first schedule">
+            <td rowspan="4" width=3%>上午</td>
+            <td>第一节课</td>
+            <td class="Mon"></td>
+            <td class="Tues"></td>
+            <td class="Wed"></td>
+            <td class="Thur"></td>
+            <td class="Fri"></td>
+            <td class="Satu"></td> 
+            <td class="Sun"></td>    
+        </tr>
+        <tr bgcolor="white" class="second schedule">
+            <td>第二节课</td>
+            <td class="Mon"></td>
+            <td class="Tues"></td>
+            <td class="Wed"></td>
+            <td class="Thur"></td>
+            <td class="Fri"></td>
+            <td class="Satu"></td> 
+            <td class="Sun"></td>   
+        </tr>
+        <tr bgcolor="white" class="third schedule">
+            <td>第三节课</td>
+            <td class="Mon"></td>
+            <td class="Tues"></td>
+            <td class="Wed"></td>
+            <td class="Thur"></td>
+            <td class="Fri"></td>
+            <td class="Satu"></td> 
+            <td class="Sun"></td>   
+        </tr>
+        <tr bgcolor="white" class="fourth schedule">
+            <td>第四节课</td>
+            <td class="Mon"></td>
+            <td class="Tues"></td>
+            <td class="Wed"></td>
+            <td class="Thur"></td>
+            <td class="Fri"></td>
+            <td class="Satu"></td> 
+            <td class="Sun"></td>   
+        </tr>
+        <tr bgcolor="white" class="fifth schedule">
+            <td rowspan="4">下午</td>
+            <td>第五节课</td>
+            <td class="Mon"></td>
+            <td class="Tues"></td>
+            <td class="Wed"></td>
+            <td class="Thur"></td>
+            <td class="Fri"></td>
+            <td class="Satu"></td> 
+            <td class="Sun"></td>   
+        </tr>
+        <tr bgcolor="white" class="sixth schedule">
+           <td>第六节课</td>
+           <td class="Mon"></td>
+           <td class="Tues"></td>
+           <td class="Wed"></td>
+           <td class="Thur"></td>
+           <td class="Fri"></td>
+           <td class="Satu"></td> 
+           <td class="Sun"></td>   
+        </tr>
+        <tr bgcolor="white" class="seventh schedule">
+            <td>第七节课</td>
+            <td class="Mon"></td>
+            <td class="Tues"></td>
+            <td class="Wed"></td>
+            <td class="Thur"></td>
+            <td class="Fri"></td>
+            <td class="Satu"></td> 
+            <td class="Sun"></td>   
+         </tr>
+         <tr bgcolor="white" class="enigth schedule">
+            <td>第八节课</td>
+            <td class="Mon"></td>
+            <td class="Tues"></td>
+            <td class="Wed"></td>
+            <td class="Thur"></td>
+            <td class="Fri"></td>
+            <td class="Satu"></td> 
+            <td class="Sun"></td>   
+         </tr>
+         <tr bgcolor="white" class="ninth schedule">
+             <td rowspan="3">晚上</td>
+            <td>第九节课</td>
+            <td class="Mon"></td>
+            <td class="Tues"></td>
+            <td class="Wed"></td>
+            <td class="Thur"></td>
+            <td class="Fri"></td>
+            <td class="Satu"></td> 
+            <td class="Sun"></td>   
+         </tr>
+         <tr bgcolor="white" class="tenth schedule">
+            <td>第十节课</td>
+            <td class="Mon"></td>
+            <td class="Tues"></td>
+            <td class="Wed"></td>
+            <td class="Thur"></td>
+            <td class="Fri"></td>
+            <td class="Satu"></td> 
+            <td class="Sun"></td>   
+         </tr>
+         <tr bgcolor="white" id="box" class="eleven schedule">
+            <td>第十一节课</td>
+            <td class="Mon"></td>
+            <td class="Tues"></td>
+            <td class="Wed"></td>
+            <td class="Thur"></td>
+            <td class="Fri"></td>
+            <td class="Satu"></td> 
+            <td class="Sun"></td>   
+         </tr>
+   </table>
+<script>
+    $(function(){
+        $('#menu7').addClass('active')
+        $('#allmenu').accordion('select', '课程信息')
+    });
+    
+    $(function () {
+        var url = "{% url 'Mypage:get_classschedule' %}"
+        $.get(url, {}, function(data){
+            putdata(data)
+        })
+        
+        var putdata = function(obj){
+            var len = obj.rows.length
+            var Mon = document.getElementsByClassName('Mon')
+            var Tues = document.getElementsByClassName('Tues')
+            var Wed = document.getElementsByClassName('Wed')
+            var Thur = document.getElementsByClassName('Thur')
+            var Fri = document.getElementsByClassName('Fri')
+            var Satu = document.getElementsByClassName('Satu')
+            var Sun = document.getElementsByClassName('Sun')
+            for(var i=0; i<len; i++){
+                if(obj.rows[i].Mon != undefined){
+                    Mon[i].textContent = obj.rows[i].Mon;
+                }
+                if(obj.rows[i].Tues != undefined){
+                    Tues[i].textContent = obj.rows[i].Tues;
+                }
+                if(obj.rows[i].Wed != undefined){
+                    Wed[i].textContent = obj.rows[i].Wed;
+                }
+                if(obj.rows[i].Thur != undefined){
+                    Thur[i].textContent = obj.rows[i].Thur;
+                }
+                if(obj.rows[i].Fri != undefined){
+                    Fri[i].textContent = obj.rows[i].Fri;
+                }
+                if(obj.rows[i].Satu != undefined){
+                    Satu[i].textContent = obj.rows[i].Satu;
+                }
+                if(obj.rows[i].Sun != undefined){
+                    Sun[i].textContent = obj.rows[i].Sun;
+                }
+            }
+        }
+    })
+    
+</script>
+
+{% endblock %}

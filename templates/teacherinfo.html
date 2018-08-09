@@ -1,0 +1,45 @@
+{% extends 'base_t.html' %}
+{% load staticfiles %}
+
+{% block style %}
+<style>
+    .info-body{
+        margin-top: 15px;
+    }
+    .info-body p{
+        margin-top: 8px;
+        margin-bottom: 0px;
+    }
+
+</style>
+{% endblock %}
+
+{% block content %}
+    <div>
+        <div style="margin-left: 100px;">
+            <img src="{% static 'images/avtar.png' %}" alt="上传头像" height="100px" width="100px" style="margin-left: 30px;">
+            <div style="margin:20px 0;"></div>
+            <!-- <div class="easyui-panel" style="width:100%;max-width:400px;padding:30px 60px;">
+                <input id="fb" class="easyui-filebox" style="width:100%" data-options="prompt:'选择文件...'">
+            </div> -->
+            <div class="info-body">
+                <p>编号：{{userinfo.teacher_username}}</p><br>
+                <p>姓名：{{userinfo.teacher_name}}</p><br>
+                <p>性别：{{userinfo.teacher_sex}}</p><br>
+                <p>年龄：{{userinfo.teacher_age}}</p><br>
+                <p>院系：{{userinfo.teacher_faculty}}</p><br>
+                <p>职称：{{userinfo.teacher_professional}}</p><br>
+                <p>专业：{{userinfo.teacher_profession}}</p><br>
+                <p>电话：{{userinfo.teacher_phone}}</p><br>
+                <p>住址：{{userinfo.teacher_adress}}</p>
+            </div>
+        </div>
+    </div>
+
+	<script>
+		$(function(){
+			$('#menu4').addClass('active')
+			$('#allmenu').accordion('select', '个人信息')
+		})
+	</script>
+{% endblock %}

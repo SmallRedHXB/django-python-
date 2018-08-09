@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+
+{% block style %}
+<style>
+	#modifypwd_body{
+		margin-left: 30%;
+	}
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="modifypwd_body">
+	<h2>修改密码</h2>
+	<div style="margin:20px 0;"></div>
+	<div class="easyui-panel" title="" style="width:100%;max-width:400px;padding:30px 60px;">
+		<div style="margin-bottom:20px">
+			<input id="old_pwd" class="easyui-textbox" label="请输入原密码：" labelPosition="top" style="width:100%;">
+		</div>
+		<div style="margin-bottom:20px">
+			<input id="new_pwd" class="easyui-textbox" label="请输入新密码：" labelPosition="top" style="width:100%;">
+		</div>
+		<div style="margin-bottom:20px">
+			<input id="new_pwd_again" class="easyui-textbox" label="请再次输入新密码：" labelPosition="top" style="width:100%;">
+		</div>
+		
+		<div>
+			<p id="btn_ok" class="easyui-linkbutton" iconCls="icon-ok" style="width:100%;height:32px">确定</p>
+		</div>
+	</div>
+</div>
+
+	<script>
+		$(function(){
+			$('#menu2').addClass('active')
+			$('#allmenu').accordion('select', '用户菜单')
+		});
+
+		$('#btn_ok').click(function(){
+			if(($('#old_pwd').val()=='') || ($('#new_pwd').val()=='') || ($('#new_pwd_again').val()=='')){
+				alert('不能输入空值。')
+				return;
+			}
+			var url = "{% url 'Mypage:do_modifypwd' %}"
+				oid_password = $('#old_pwd').val()
+				new_password = $('#new_pwd').val()
+				new_password_again = $('#new_pwd_again').val()
+				if(new_password!=new_password_again){
+					alert('两次输入的新密码要一致。')
+					return;
+				}
+				if(oid_password == new_password){
+					alert('新密码和旧密码不能相同。')
+					return;
+				}
+			$.get(url, {'old_password': oid_password,'new_password':new_password}, function(data){
+				alert(data)
+			})
+		})
+	</script>
+{% endblock %}
